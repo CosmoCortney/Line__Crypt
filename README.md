@@ -1,5 +1,5 @@
 # Line__Crypt
-A small tool to decrypt F-Zero GX's line__.bin to an .lz archive and vice versa.
+A small tool to decrypt F-Zero GX's line__.bin into an .lz archive and vice versa.
 
 ## Usage
 ### Decryption

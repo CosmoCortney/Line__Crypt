@@ -62,13 +62,21 @@ namespace Line__Crypt
 		return size;
 	}
 
-	static void Decrypt(void* file, uint32_t fileSize)
+	static void Decrypt(void* file, uint32_t fileSize, bool isJPN)
 	{
 		//prepare key values and parameters
-		int key0 = 0x000cd8f3;
-		int key1 = 0x9b36bb94;
-		int key2 = 0xaf8910be;
+		int saltUSA = 0x180a;
+		int saltJPN = 0x0ce0;
 		int salt = 0;
+		int key0USA = 0x000cd8f3;
+		int key0JPN = 0x0004f107;
+		int key0 = isJPN ? key0JPN : key0USA;
+		int key1USA = 0x9b36bb94;
+		int key1JPN = 0xb5fb6483;
+		int key1 = isJPN ? key1JPN : key1USA;
+		int key2USA = 0xaf8910be;
+		int key2JPN = 0xdeaddead;
+		int key2 = isJPN ? key2JPN : key2USA;
 		int fileSizeExtended = (fileSize + 0x1f) & ~0; //filesize next multiple of 0x20
 		int fileLocation = reinterpret_cast<int>(file);
 		int r8 = rlwinm(fileSizeExtended, 30, 2, 31);
@@ -83,7 +91,7 @@ namespace Line__Crypt
 		{
 			//decrypting 1st 4 bytes of 0x20 bytes block
 			int keyProd = key2 * key1;
-			salt = 0x180a;
+			salt = isJPN ? saltJPN : saltUSA;
 			r3 = lwz(0, rwLocation);
 			int r29 = keyProd + key0;
 			r3 ^= r29;
@@ -176,14 +184,14 @@ namespace Line__Crypt
 			return;
 
 		//set parameters for last block processing
-		r3 = 0x9b370000;
+		r3 = isJPN ? 0xb5fb0000 : 0x9b370000;
 		int r4 = rlwinm(cryptedWords, 2, 0, 29);
-		r11 = r3, (short)0xbb94;
+		r11 = r3 + isJPN ? (short)0x6483 : (short)0xbb94;
 		r3 = 0x000d0000;
 		int r0 = r8 - cryptedWords;
 		rwLocation = fileLocation + r4;
-		r3 += (short)0xd8f3;
-		salt = 0x180a;
+		r3 += isJPN ? (short)0xf107 : (short)0xd8f3;
+		salt = isJPN ? saltJPN : saltUSA;
 	
 		//crypt last block
 		for (int i = r0; i > 0; --i)

@@ -1,8 +1,9 @@
 #include"Line__Crypt.h"
+#include <algorithm> 
 
 int wmain(int argc, wchar_t** argv)
 {
-	if (argc <= 1)
+	if (argc <= 2)
 	{
 		std::cout << "empty argument";
 		return 3;
@@ -19,9 +20,12 @@ int wmain(int argc, wchar_t** argv)
 		return 1;
 	}
 
-	Line__Crypt::Decrypt(file, size);
+	std::wstring region(argv[2]);
+	std::transform(region.begin(), region.end(), region.begin(), towupper);
+	bool isJPN = !(bool)region.compare(L"JPN");
 
-	std::wcout << "bleh " << path.substr(0, path.length() - 3);
+	Line__Crypt::Decrypt(file, size, isJPN);
+
 	if (!path.substr(path.length() - 3).compare(L"bin"))
 	{
 		path = path.substr(0, path.length() - 3).append(L"rel.lz");

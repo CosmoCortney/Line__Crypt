@@ -1,1 +1,0 @@
-Line__Crypt.exe line__.bin JPN

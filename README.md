@@ -12,7 +12,7 @@ Paste the line__.rel.lz into the folder containing Line__Crypt. Double-click the
 Rename already existing files of the .bin or .rel.lz if you don't want them to be overwritten
 
 If you want to use command line instead, use the following command structure:
-Line__Crypt.exe <inputFile> <regionFlag>
+`Line__Crypt.exe inputFile regionFlag`
 Region Flags: INT for the American and European releases, JPN for the Japanese release 
 
 Example:
